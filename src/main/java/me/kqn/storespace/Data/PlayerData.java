@@ -12,10 +12,13 @@ public class PlayerData {
     }
     public static PlayerData getPlayerData(UUID uuid){
         if(!pDatas.containsKey(uuid)){
-            pDatas.put(uuid,new PlayerData());
+            PlayerData playerData=new PlayerData();
+            playerData.storePages[0]=new StorePage();
+            pDatas.put(uuid,playerData);
+
         }
         return pDatas.get(uuid);
     }
-    public StorePage[] storePages=null;
+    public StorePage[] storePages=new StorePage[1];
 
 }

@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ItemBuilder {
     private Material material;
@@ -15,7 +16,7 @@ public class ItemBuilder {
     private int cmd=-1;
     private String name=null;
     private NBTCompound NBT=null;
-    private ArrayList<String > lore=null;
+    private List<String > lore=null;
     public ItemBuilder(Material material){
         this.material=material;
     }
@@ -27,7 +28,7 @@ public class ItemBuilder {
         this.amount=amount;
         return this;
     }
-    public ItemBuilder setLore(ArrayList<String> lore){
+    public ItemBuilder setLore(List<String> lore){
         this.lore=lore;
         return this;
     }
