@@ -22,16 +22,7 @@ public final class StoreSpace extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        ChestGui gui=new ChestGui(6,"asd");
-        OutlinePane pane=new OutlinePane(9,6);
-        pane.setOnClick(x->{
-            System.out.println("click");
-        });
-        gui.addPane(pane);
-        gui.setOnClose(x->{
-            gui.getPanes().get(0).getItems().forEach(y-> System.out.println(y.getItem()));
-        });
-        gui.show(Bukkit.getPlayer("Kurt_Kong"));
+        Bukkit.getPluginCommand("StoreSpace").setExecutor(new MainCommand());
     }
 
     @Override

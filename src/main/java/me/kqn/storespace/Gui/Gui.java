@@ -14,6 +14,7 @@ import me.kqn.storespace.Utils.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import javax.swing.*;
@@ -29,52 +30,58 @@ public class Gui {
         this.pData=PlayerData.getPlayerData(player);
     }
 
-    public void show(){
+    public void showPage(int pageID){
+        if(pData.storePages.length<=pageID||pageID<0)return;
         ChestGui gui=new ChestGui(6,"储存空间");
-        PaginatedPane pagePane=new PaginatedPane(8,6);
-       // StaticPane[] pages=new StaticPane[pData.storePages.length];
         //读取pData到gui界面，没有对pData进行任何写操作
         //创建窗口主体
-        for (int i = 0; i < pData.storePages.length; i++) {
-            StorePage storePage=pData.storePages[i];
+        StorePage storePage=pData.storePages[pageID];
             StaticPane page=new StaticPane(8,6);
             for(int j=0;j<storePage.contents.length;j++){
                 if(storePage.contents[j]!=null&&storePage.contents[j].getType()!= Material.AIR){
                     page.addItem(new GuiItem(storePage.contents[j]),j%8,j/8);
                 }
             }
-
-            GenerateUnlockIcon(storePage,page,i);
-            pagePane.addPane(i,page);
-        }
+            GenerateUnlockIcon(storePage,page, pageID);
+            gui.addPane(page);
         //创建右边滑块
-        PaginatedPane slider=new PaginatedPane(8,0,1,6);
-        for(int i=0;i<pData.storePages.length;i++){
-            StaticPane spane=new StaticPane(1,6);
-            //下一页按钮
-            spane.addItem(new GuiItem(preIcon(i),x->{if(page_current-1>=0){slider.setPage(page_current-1);
-            pagePane.setPage(page_current-1);page_current--;gui.update();}x.setCancelled(true);}),0,0);
+            StaticPane spane=new StaticPane(8,0,1,6);
             //上一页按钮
-            spane.addItem(new GuiItem(nextIcon(i),x->{if(page_current+1<pData.storePages.length){
-                pagePane.setPage(page_current+1);slider.setPage(page_current+1);page_current++;
-            }x.setCancelled(true);gui.update();}),0,5);
+            spane.addItem(new GuiItem(preIcon(pageID), x->{if(page_current-1>=0){
+               // player.closeInventory();
+                page_current--;
+                showPage(pageID-1);
+            }x.setCancelled(true);}),0,0);
+            //下一页按钮
+            spane.addItem(new GuiItem(nextIcon(pageID), x->{if(page_current+1<pData.storePages.length){
+            //    player.closeInventory();
+                page_current++;
+                showPage(pageID+1);
+            }x.setCancelled(true);}),0,5);
 
-            float percent=(float)(i+1)/(float)pData.storePages.length;
+            float percent=(float)(pageID +1)/(float)pData.storePages.length;
 
             int slidepos=(int)(4.0*percent);
 
             if(slidepos==0)slidepos=1;
             //滑块
-            spane.addItem(new GuiItem(slideIcon(i),x->x.setCancelled(true)),0,slidepos);
-            slider.addPane(i,spane);
-        }
-
-
-        gui.setOnClose(x->CallonClose(gui,x));
-        gui.addPane(slider);
-        gui.addPane(pagePane);
-        gui.show(player);
+            spane.addItem(new GuiItem(slideIcon(pageID), x->x.setCancelled(true)),0,slidepos);
+            gui.addPane(spane);
+            gui.setOnClose(x->CallonClose(gui,x,page_current));
+            gui.show(player);
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
     private void GenerateUnlockIcon(StorePage storePage,StaticPane page,int pageID){
         int x_lock= storePage.amount_unlock%8;
@@ -113,20 +120,21 @@ public class Gui {
 
     }
     //在gui关闭时，保存数据到pData
-    private void CallonClose(ChestGui gui,InventoryCloseEvent event){
-        PaginatedPane pagePane=(PaginatedPane) gui.getPanes().get(0);
-        Iterator<Pane> iterator= pagePane.getPanes().iterator();
-        for (int i = 0; i < pagePane.getPanes().size(); i++) {
-           StaticPane page= (StaticPane) iterator.next();
-           StorePage storePage=pData.storePages[i];
-
-
-
-           storePage.contents=new ItemStack[storePage.amount_unlock];
-
-            GuiItem[] pageItem=new GuiItem[page.getItems().size()];
-            page.getItems().toArray(pageItem);
-
+    private void CallonClose(ChestGui gui,InventoryCloseEvent event,int pageid){
+        Inventory pageInv= gui.getInventory();
+        StorePage storePage=pData.storePages[pageid];
+        storePage.contents=new ItemStack[storePage.amount_unlock];
+        for(int i=0;i<storePage.contents.length;i++){
+            int x=i%8,y=i/8;
+            if(getInv(pageInv,x,y)!=null&&getInv(pageInv,x,y).getType()!=Material.AIR){
+                storePage.contents[i]=getInv(pageInv,x,y);
+                System.out.println("存储:"+getInv(pageInv,x,y));
+            }
         }
+    }
+
+    private ItemStack getInv(Inventory inv, int x, int y){
+        ItemStack [] itemStacks=inv.getContents();
+        return itemStacks[y*9+x];
     }
 }

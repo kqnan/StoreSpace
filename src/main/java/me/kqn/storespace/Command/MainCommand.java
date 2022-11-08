@@ -10,7 +10,7 @@ public class MainCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Gui gui=new Gui(Bukkit.getPlayerExact("Kurt_Kong"));
-        gui.show();
+        gui.showPage(0);
         return true;
     }
 }
