@@ -16,6 +16,6 @@ public class PlayerData {
         }
         return pDatas.get(uuid);
     }
-    StorePage[] storePages=null;
+    public StorePage[] storePages=null;
 
 }
