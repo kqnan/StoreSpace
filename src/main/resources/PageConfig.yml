@@ -1,0 +1,61 @@
+#当只有一个页面时
+1:
+  1:
+    unlock:
+      name: '未解锁1'
+      lore:
+        - '未解锁的格子'
+      custommodeldata: 1234
+      material: 'paper'
+    prePageIcon:
+      name: '上一页1'
+      lore:
+        - '上一页'
+      custommodeldata: 12
+      material: 'grass_block'
+    nextPageIcon:
+      name: '下一页1'
+      lore:
+        - '下一页'
+      custommodeldata: 123
+      material: 'grass_block'
+#当有两个页面时
+2:
+  1:
+    unlock:
+      name: '未解锁1'
+      lore:
+        - '未解锁的格子'
+      custommodeldata: 1234
+      material: 'paper'
+    prePageIcon:
+      name: '上一页1'
+      lore:
+        - '上一页'
+      custommodeldata: 12
+      material: 'grass_block'
+    nextPageIcon:
+      name: '下一页1'
+      lore:
+        - '下一页'
+      custommodeldata: 123
+      material: 'grass_block'
+  2:
+    unlock:
+      name: '未解锁2'
+      lore:
+        - '未解锁的格子'
+      custommodeldata: 1234
+      material: 'paper'
+    prePageIcon:
+      name: '上一页2'
+      lore:
+        - '上一页'
+      custommodeldata: 12
+      material: 'grass_block'
+    nextPageIcon:
+      name: '下一页2'
+      lore:
+        - '下一页'
+      custommodeldata: 123
+      material: 'grass_block'
