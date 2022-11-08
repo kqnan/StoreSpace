@@ -6,13 +6,19 @@ import com.github.stefvanschie.inventoryframework.pane.MasonryPane;
 import com.github.stefvanschie.inventoryframework.pane.PaginatedPane;
 import com.github.stefvanschie.inventoryframework.pane.Pane;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
+import com.github.stefvanschie.inventoryframework.pane.component.Label;
 import com.github.stefvanschie.inventoryframework.pane.component.Slider;
+import com.github.stefvanschie.inventoryframework.pane.component.ToggleButton;
 import me.kqn.storespace.Config.PageConfig;
 import me.kqn.storespace.Data.PlayerData;
 import me.kqn.storespace.Data.StorePage;
+import me.kqn.storespace.StoreSpace;
 import me.kqn.storespace.Utils.ItemBuilder;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.DragType;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -33,6 +39,32 @@ public class Gui {
     public void showPage(int pageID){
         if(pData.storePages.length<=pageID||pageID<0)return;
         ChestGui gui=new ChestGui(6,"储存空间");
+        float percent=(float)(pageID +1)/(float)pData.storePages.length;
+        int slidepos=(int)(4.0*percent);
+        if(slidepos==0)slidepos=1;
+        int finalSlidepos = slidepos;
+        gui.setOnGlobalClick(x->{
+            Bukkit.getScheduler().runTaskLater(StoreSpace.plugin,()->{
+                Inventory inv=gui.getInventory();
+                if(getInv(inv,8,1)!=null&&!getInv(inv,8,1).getType().isAir()&& finalSlidepos !=1){
+                    player.getInventory().addItem(inv.getItem(17));
+                    inv.setItem(17,new ItemStack(Material.AIR));
+                }
+                if(getInv(inv,8,2)!=null&&!getInv(inv,8,2).getType().isAir()&& finalSlidepos !=2){
+                    player.getInventory().addItem(inv.getItem(26));
+                    inv.setItem(26,new ItemStack(Material.AIR));
+                }
+                if(getInv(inv,8,3)!=null&&!getInv(inv,8,3).getType().isAir()&& finalSlidepos !=3){
+                    player.getInventory().addItem(inv.getItem(35));
+                    inv.setItem(35,new ItemStack(Material.AIR));
+                }
+                if(getInv(inv,8,4)!=null&&!getInv(inv,8,4).getType().isAir()&& finalSlidepos !=4){
+                    player.getInventory().addItem(inv.getItem(44));
+                    inv.setItem(44,new ItemStack(Material.AIR));
+                }
+            },1);
+        });
+        gui.setOnGlobalDrag(x->x.setCancelled(true));
         //读取pData到gui界面，没有对pData进行任何写操作
         //创建窗口主体
         StorePage storePage=pData.storePages[pageID];
@@ -44,7 +76,7 @@ public class Gui {
             }
             GenerateUnlockIcon(storePage,page, pageID);
             gui.addPane(page);
-        //创建右边滑块
+            //创建右边滑块
             StaticPane spane=new StaticPane(8,0,1,6);
             //上一页按钮
             spane.addItem(new GuiItem(preIcon(pageID), x->{if(page_current-1>=0){
@@ -59,30 +91,15 @@ public class Gui {
                 showPage(pageID+1);
             }x.setCancelled(true);}),0,5);
 
-            float percent=(float)(pageID +1)/(float)pData.storePages.length;
 
-            int slidepos=(int)(4.0*percent);
 
-            if(slidepos==0)slidepos=1;
+
             //滑块
-            spane.addItem(new GuiItem(slideIcon(pageID), x->x.setCancelled(true)),0,slidepos);
+            spane.addItem(new GuiItem(slideIcon(pageID),x->{x.setCancelled(true);}),0,slidepos);
             gui.addPane(spane);
             gui.setOnClose(x->CallonClose(gui,x,page_current));
             gui.show(player);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
     private void GenerateUnlockIcon(StorePage storePage,StaticPane page,int pageID){
         int x_lock= storePage.amount_unlock%8;
         int y_lock=storePage.amount_unlock/8;
