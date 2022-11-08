@@ -119,13 +119,14 @@ public class Gui {
         for (int i = 0; i < pagePane.getPanes().size(); i++) {
            StaticPane page= (StaticPane) iterator.next();
            StorePage storePage=pData.storePages[i];
+
+
+
            storePage.contents=new ItemStack[storePage.amount_unlock];
 
             GuiItem[] pageItem=new GuiItem[page.getItems().size()];
             page.getItems().toArray(pageItem);
-            for (int i1 = 0; i1 < event.getInventory().getContents().length; i1++) {
-                System.out.println(event.getInventory().getContents()[i1]);
-            }
+
         }
     }
 }
