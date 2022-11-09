@@ -1,57 +1,72 @@
 package me.kqn.storespace.Config;
 
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import me.kqn.storespace.StoreSpace;
+import org.bukkit.Bukkit;
+import org.bukkit.Sound;
+import org.bukkit.configuration.file.YamlConfiguration;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class PageConfig {
-    public static ArrayList<String> TitlePages=new ArrayList<>();
-    public static ArrayList<ArrayList<Icon>> unlockedIcon=new ArrayList<>();
-    public static ArrayList<ArrayList<Icon>> prePageIcon=new ArrayList<>();
-    public static ArrayList<ArrayList<Icon>> nextPageIcon=new ArrayList<>();
-    public static ArrayList<ArrayList<Icon>> slidePageIcon=new ArrayList<>();
+    public static String getMoeny_unlock(int slot) {
+        return moeny_unlock.replace("%slot%",String.valueOf(slot));
+    }
 
-    public static Icon getUnlockIcon(int UnlockPages,int pageID){
-        Icon icon=new Icon();
-        icon.name="未解锁";
+    public static String getPerm_unlock(int slot) {
+        return perm_unlock.replace("%slot%",String.valueOf(slot));
+    }
 
-        icon.lore=Arrays.asList("1","2");
-        icon.custommodeldata=0;
-        icon.material=Material.PAPER;
-        return icon;
+    public static List<String> getMsg_noperm(int slot) {
+        List<String> msg=new ArrayList<>();
+        for (String s : msg_noperm) {
+            msg.add(s.replace("%slot%",String.valueOf(slot)));
+        }
+        return msg;
     }
-    public static Icon getPreIcon(int UnlockPages,int pageID){
-        Icon icon=new Icon();
-        icon.name="上一页";
-        icon.lore=Arrays.asList("1","2");
-        icon.custommodeldata=0;
-        icon.material=Material.GRASS_BLOCK;
-        return icon;
+
+    public static Sound getUnlock_sound() {
+        return unlock_sound;
     }
-    public static Icon getNextIcon(int UnlockPages,int pageID){
-        Icon icon=new Icon();
-        icon.name="下一页";
-        icon.lore= Arrays.asList("1","2");
-        icon.custommodeldata=0;
-        icon.material=Material.GRASS_BLOCK;
-        return icon;
+
+    public static Sound getNoperm_sound() {
+        return noperm_sound;
     }
-    public static Icon getSlideIcon(int UnlockPages,int pageID){
-        Icon icon=new Icon();
-        icon.name="未解锁";
-        icon.lore= Arrays.asList("1","2");
-        icon.custommodeldata=0;
-        icon.material=Material.ACACIA_LEAVES;
-        return icon;
+
+    public static Sound getPage_sound() {
+        return page_sound;
     }
-    public  static class Icon{
-        public String name;
-        public List<String> lore;
-        public    int custommodeldata;
-        public   Material material;
+
+    public static List<String> getMsg_nomoney(int slot) {
+        List<String> msg=new ArrayList<>();
+        for (String s : msg_nomoney) {
+            msg.add(s.replace("%slot%",String.valueOf(slot)));
+        }
+        return msg;
     }
+
+    private static String moeny_unlock;
+    private static  String perm_unlock;
+    private static List<String> msg_noperm;
+    private static Sound unlock_sound;
+    private static  Sound noperm_sound;
+    private static Sound page_sound;
+    private static List<String> msg_nomoney;
+    private static YamlConfiguration file;
+    public static void read(){
+        try {
+            file=YamlConfiguration.loadConfiguration(new File("plugins/StoreSpace/PageConfig.yml"));
+            moeny_unlock=file.getString("money_unlock");
+            perm_unlock=file.getString("perm_unlock");
+            msg_noperm=file.getStringList("msg_noperm");
+            unlock_sound=Sound.valueOf(file.getString("sound_unlock").toUpperCase());
+            noperm_sound= Sound.valueOf(file.getString("sound_noperm").toUpperCase());
+            page_sound=Sound.valueOf(file.getString("sound_page").toUpperCase());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    
 }

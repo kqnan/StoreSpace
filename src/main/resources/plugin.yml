@@ -2,6 +2,8 @@ name: StoreSpace
 version: '${project.version}'
 main: me.kqn.storespace.StoreSpace
 api-version: 1.16
+depend:
+  - Vault
 commands:
   StoreSpace:
     aliases: ss

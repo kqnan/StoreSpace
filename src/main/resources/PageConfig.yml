@@ -1,61 +1,20 @@
-#当只有一个页面时
-1:
-  1:
-    unlock:
-      name: '未解锁1'
-      lore:
-        - '未解锁的格子'
-      custommodeldata: 1234
-      material: 'paper'
-    prePageIcon:
-      name: '上一页1'
-      lore:
-        - '上一页'
-      custommodeldata: 12
-      material: 'grass_block'
-    nextPageIcon:
-      name: '下一页1'
-      lore:
-        - '下一页'
-      custommodeldata: 123
-      material: 'grass_block'
-#当有两个页面时
-2:
-  1:
-    unlock:
-      name: '未解锁1'
-      lore:
-        - '未解锁的格子'
-      custommodeldata: 1234
-      material: 'paper'
-    prePageIcon:
-      name: '上一页1'
-      lore:
-        - '上一页'
-      custommodeldata: 12
-      material: 'grass_block'
-    nextPageIcon:
-      name: '下一页1'
-      lore:
-        - '下一页'
-      custommodeldata: 123
-      material: 'grass_block'
-  2:
-    unlock:
-      name: '未解锁2'
-      lore:
-        - '未解锁的格子'
-      custommodeldata: 1234
-      material: 'paper'
-    prePageIcon:
-      name: '上一页2'
-      lore:
-        - '上一页'
-      custommodeldata: 12
-      material: 'grass_block'
-    nextPageIcon:
-      name: '下一页2'
-      lore:
-        - '下一页'
-      custommodeldata: 123
-      material: 'grass_block'
+#解锁花费的金币 %slot%格子的序号（从左上角0开始，从左往右递增，从上往下递增）
+#支持数学公式
+money_unlock: "%slot%*10"
+#解锁需要的权限 %slot%代表格子序号
+perm_unlock: "StoreSpace.%slot%"
+#没权限时提示消息，支持多行消息，支持%slot%
+msg_noperm:
+  - '你没权限解锁%slot%号格子'
+  - '你需要StoreSpace.%slot%权限'
+#金币不足时消息
+msg_nomoney:
+  - '你没有足够金币'
+  - '无法解锁%slot%号格子'
+#解锁时的声音详见 https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
+sound_unlock: "BLOCK_ANVIL_HIT"
+#没权限时的声音
+sound_noperm: "BLOCK_ANVIL_HIT"
+#翻页的声音
+sound_page: "BLOCK_ANVIL_HIT"
+

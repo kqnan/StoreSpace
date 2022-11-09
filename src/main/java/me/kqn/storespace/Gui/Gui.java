@@ -2,29 +2,19 @@ package me.kqn.storespace.Gui;
 
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
-import com.github.stefvanschie.inventoryframework.pane.MasonryPane;
-import com.github.stefvanschie.inventoryframework.pane.PaginatedPane;
-import com.github.stefvanschie.inventoryframework.pane.Pane;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
-import com.github.stefvanschie.inventoryframework.pane.component.Label;
-import com.github.stefvanschie.inventoryframework.pane.component.Slider;
-import com.github.stefvanschie.inventoryframework.pane.component.ToggleButton;
-import me.kqn.storespace.Config.PageConfig;
+import me.kqn.storespace.Config.PageIcon;
 import me.kqn.storespace.Data.PlayerData;
 import me.kqn.storespace.Data.StorePage;
 import me.kqn.storespace.StoreSpace;
 import me.kqn.storespace.Utils.ItemBuilder;
+import me.kqn.storespace.Utils.NBTUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.DragType;
-import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-
-import javax.swing.*;
-import java.util.Iterator;
 
 public class Gui {
     Player player;
@@ -43,22 +33,24 @@ public class Gui {
         int slidepos=(int)(4.0*percent);
         if(slidepos==0)slidepos=1;
         int finalSlidepos = slidepos;
+        //阻止滑条栏放置物品
         gui.setOnGlobalClick(x->{
             Bukkit.getScheduler().runTaskLater(StoreSpace.plugin,()->{
                 Inventory inv=gui.getInventory();
-                if(getInv(inv,8,1)!=null&&!getInv(inv,8,1).getType().isAir()&& finalSlidepos !=1){
+
+                if(getInv(inv,8,1)!=null&&getInv(inv,8,1).getType()!=Material.AIR&& finalSlidepos !=1){
                     player.getInventory().addItem(inv.getItem(17));
                     inv.setItem(17,new ItemStack(Material.AIR));
                 }
-                if(getInv(inv,8,2)!=null&&!getInv(inv,8,2).getType().isAir()&& finalSlidepos !=2){
+                if(getInv(inv,8,2)!=null&&getInv(inv,8,2).getType()!=Material.AIR&& finalSlidepos !=2){
                     player.getInventory().addItem(inv.getItem(26));
                     inv.setItem(26,new ItemStack(Material.AIR));
                 }
-                if(getInv(inv,8,3)!=null&&!getInv(inv,8,3).getType().isAir()&& finalSlidepos !=3){
+                if(getInv(inv,8,3)!=null&&getInv(inv,8,3).getType()!=Material.AIR&& finalSlidepos !=3){
                     player.getInventory().addItem(inv.getItem(35));
                     inv.setItem(35,new ItemStack(Material.AIR));
                 }
-                if(getInv(inv,8,4)!=null&&!getInv(inv,8,4).getType().isAir()&& finalSlidepos !=4){
+                if(getInv(inv,8,4)!=null&&getInv(inv,8,4).getType()!=Material.AIR&& finalSlidepos !=4){
                     player.getInventory().addItem(inv.getItem(44));
                     inv.setItem(44,new ItemStack(Material.AIR));
                 }
@@ -71,24 +63,30 @@ public class Gui {
             StaticPane page=new StaticPane(8,6);
             for(int j=0;j<storePage.contents.length;j++){
                 if(storePage.contents[j]!=null&&storePage.contents[j].getType()!= Material.AIR){
-                    page.addItem(new GuiItem(storePage.contents[j]),j%8,j/8);
+                    GuiItem storeItem=new GuiItem(storePage.contents[j]);
+                    storeItem.setAction(x->{x.getWhoClicked().getInventory().addItem(NBTUtils.removeGuiNBT(storeItem.getItem()));x.setCancelled(true);
+                        x.getInventory().setItem(x.getSlot(),null);
+
+                    });
+                    page.addItem(storeItem,j%8,j/8);
                 }
             }
+            //创建未解锁槽位的图标
             GenerateUnlockIcon(storePage,page, pageID);
             gui.addPane(page);
             //创建右边滑块
             StaticPane spane=new StaticPane(8,0,1,6);
             //上一页按钮
             spane.addItem(new GuiItem(preIcon(pageID), x->{if(page_current-1>=0){
-               // player.closeInventory();
+                //player.closeInventory();
                 page_current--;
-                showPage(pageID-1);
+                Bukkit.getScheduler().runTaskLater(StoreSpace.plugin,()->{showPage(pageID-1);},1);
             }x.setCancelled(true);}),0,0);
             //下一页按钮
             spane.addItem(new GuiItem(nextIcon(pageID), x->{if(page_current+1<pData.storePages.length){
-            //    player.closeInventory();
+                //player.closeInventory();
                 page_current++;
-                showPage(pageID+1);
+                Bukkit.getScheduler().runTaskLater(StoreSpace.plugin,()->{showPage(pageID+1);},1);
             }x.setCancelled(true);}),0,5);
 
 
@@ -97,7 +95,7 @@ public class Gui {
             //滑块
             spane.addItem(new GuiItem(slideIcon(pageID),x->{x.setCancelled(true);}),0,slidepos);
             gui.addPane(spane);
-            gui.setOnClose(x->CallonClose(gui,x,page_current));
+            gui.setOnClose(x->CallonClose(gui,x,pageID));
             gui.show(player);
     }
     private void GenerateUnlockIcon(StorePage storePage,StaticPane page,int pageID){
@@ -105,33 +103,43 @@ public class Gui {
         int y_lock=storePage.amount_unlock/8;
         for(;y_lock<6;y_lock++){
             for(;x_lock<8;x_lock++){
-                page.addItem(new GuiItem(UnlockIcon(pageID),x->{x.setCancelled(true);player.sendMessage("未解锁");}),x_lock,y_lock);
+                int finalY_lock = y_lock;
+                int finalX_lock = x_lock;
+                page.addItem(new GuiItem(UnlockIcon(pageID), x->{x.setCancelled(true);
+                    int slot=finalY_lock*8+finalX_lock;
+                   if( storePage.unlock(slot)){
+                       if(slot==47)//是否时本页最后一个槽位
+                       {
+
+                       }
+                   }
+                }),x_lock,y_lock);
 
             }
             x_lock=0;
         }
     }
     private ItemStack slideIcon(int pageID){
-        PageConfig.Icon icon=PageConfig.getSlideIcon(pData.storePages.length,pageID);
+        PageIcon.Icon icon= PageIcon.getSlideIcon(pData.storePages.length,pageID);
         return new ItemBuilder(icon.material).setLore(icon.lore).setCustomModelData(icon.custommodeldata)
                 .setName(icon.name).build();
 
     }
     private ItemStack preIcon(int pageID){
-        PageConfig.Icon icon=PageConfig.getPreIcon(pData.storePages.length,pageID);
+        PageIcon.Icon icon= PageIcon.getPreIcon(pData.storePages.length,pageID);
         return new ItemBuilder(icon.material).setLore(icon.lore).setCustomModelData(icon.custommodeldata)
                 .setName(icon.name).build();
 
     }
     private ItemStack nextIcon(int pageID){
-        PageConfig.Icon icon=PageConfig.getPreIcon(pData.storePages.length,pageID);
+        PageIcon.Icon icon= PageIcon.getPreIcon(pData.storePages.length,pageID);
         return new ItemBuilder(icon.material).setLore(icon.lore).setCustomModelData(icon.custommodeldata)
                 .setName(icon.name).build();
 
     }
     private ItemStack UnlockIcon(int pageID){
 
-            PageConfig.Icon icon=PageConfig.getUnlockIcon(pData.storePages.length,pageID);
+            PageIcon.Icon icon= PageIcon.getUnlockIcon(pData.storePages.length,pageID);
         return new ItemBuilder(icon.material).setLore(icon.lore).setCustomModelData(icon.custommodeldata)
                 .setName(icon.name).build();
 
@@ -145,7 +153,7 @@ public class Gui {
             int x=i%8,y=i/8;
             if(getInv(pageInv,x,y)!=null&&getInv(pageInv,x,y).getType()!=Material.AIR){
                 storePage.contents[i]=getInv(pageInv,x,y);
-                System.out.println("存储:"+getInv(pageInv,x,y));
+
             }
         }
     }
