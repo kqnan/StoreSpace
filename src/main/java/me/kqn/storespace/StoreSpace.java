@@ -19,6 +19,7 @@ public static StoreSpace plugin;
     public void onEnable() {
         plugin=this;
         loadConfig();
+        initIntegretion();
         Bukkit.getPluginCommand("StoreSpace").setExecutor(new MainCommand());
 
     }
@@ -28,7 +29,7 @@ public static StoreSpace plugin;
     }
     private void initIntegretion(){
         if(Bukkit.getPluginManager().isPluginEnabled("Vault")){
-            economy=new Vault(this);
+            economy=new Vault();
             Msg.Log("Vault挂钩");
         }
         permission=new DefaultPerm();

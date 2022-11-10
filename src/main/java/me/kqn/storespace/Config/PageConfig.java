@@ -57,7 +57,8 @@ public class PageConfig {
     private static YamlConfiguration file;
     public static void read(){
         try {
-            file=YamlConfiguration.loadConfiguration(new File("plugins/StoreSpace/PageConfig.yml"));
+            StoreSpace.plugin.saveResource("PageConfig.yml",false);
+            file=YamlConfiguration.loadConfiguration(new File("plugins\\StoreSpace\\PageConfig.yml"));
             moeny_unlock=file.getString("money_unlock");
             perm_unlock=file.getString("perm_unlock");
             msg_noperm=file.getStringList("msg_noperm");

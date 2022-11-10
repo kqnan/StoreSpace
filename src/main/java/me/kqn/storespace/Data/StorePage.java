@@ -15,13 +15,14 @@ import java.util.Arrays;
 import java.util.UUID;
 
 public class StorePage {
+    // TODO: 2022/11/10 多线程问题，容易引发错误 
     private UUID pID;
-    public int amount_unlock=48;
+    public int amount_unlock=7;
     public boolean[] unlocked=null;
     public ItemStack[] contents=null;
     public StorePage(UUID player){
         this.pID=player;
-        unlocked=new boolean[48];
+        unlocked=new boolean[amount_unlock];
         Arrays.fill(unlocked, false);
         for(int i=0;i<7;i++)unlocked[i]=true;
         contents=new ItemStack[amount_unlock];
@@ -56,6 +57,7 @@ public class StorePage {
         }
         //解锁
         expandPage();//创建一个新空间，把旧空间复制到新空间，再丢弃旧空间
+        StoreSpace.plugin.economy.take(player,moneyNeed);
         if(player.isOnline()){
             SoundUtils.playSound((Player) player,PageConfig.getUnlock_sound());
         }

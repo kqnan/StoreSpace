@@ -28,6 +28,7 @@
                 </configuration>
             </plugin>
             <plugin>
+
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.2.4</version>
@@ -36,15 +37,15 @@
                     <relocations>
                         <relocation>
                             <pattern>com.github.stefvanschie.inventoryframework</pattern>
-                            <shadedPattern>me.kqn.chestunits.libs.inventoryframework</shadedPattern>
+                            <shadedPattern>me.kqn.storespace.libs.inventoryframework</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.nfunk.jep</pattern>
-                            <shadedPattern>me.kqn.chestunits.libs.jep</shadedPattern>
+                            <shadedPattern>me.kqn.storespace.libs.jep</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>de.tr7zw.changeme.nbtapi</pattern>
-                            <shadedPattern>me.kqn.chestunits.libs.NBTAPI</shadedPattern>
+                            <shadedPattern>me.kqn.storespace.libs.NBTAPI</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -114,6 +115,7 @@
             <groupId>de.tr7zw</groupId>
             <artifactId>item-nbt-api</artifactId>
             <version>2.10.0</version>
+
         </dependency>
 
         <dependency>

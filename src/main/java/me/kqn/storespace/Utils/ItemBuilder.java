@@ -48,6 +48,7 @@ public class ItemBuilder {
         ItemStack itemStack=new ItemStack(material);
         itemStack.setAmount(amount);
         ItemMeta meta=itemStack.getItemMeta();
+
         meta.setCustomModelData(cmd);
         if(cmd!=-1){
             meta.setCustomModelData(cmd);

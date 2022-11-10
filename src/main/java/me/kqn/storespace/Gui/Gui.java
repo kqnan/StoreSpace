@@ -3,14 +3,18 @@ package me.kqn.storespace.Gui;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
+import me.kqn.storespace.Config.PageConfig;
 import me.kqn.storespace.Config.PageIcon;
 import me.kqn.storespace.Data.PlayerData;
 import me.kqn.storespace.Data.StorePage;
 import me.kqn.storespace.StoreSpace;
 import me.kqn.storespace.Utils.ItemBuilder;
+import me.kqn.storespace.Utils.Msg;
 import me.kqn.storespace.Utils.NBTUtils;
+import me.kqn.storespace.Utils.SoundUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
@@ -72,7 +76,7 @@ public class Gui {
                 }
             }
             //创建未解锁槽位的图标
-            GenerateUnlockIcon(storePage,page, pageID);
+            GenerateUnlockIcon(storePage,page, pageID,gui);
             gui.addPane(page);
             //创建右边滑块
             StaticPane spane=new StaticPane(8,0,1,6);
@@ -98,7 +102,7 @@ public class Gui {
             gui.setOnClose(x->CallonClose(gui,x,pageID));
             gui.show(player);
     }
-    private void GenerateUnlockIcon(StorePage storePage,StaticPane page,int pageID){
+    private void GenerateUnlockIcon(StorePage storePage,StaticPane page,int pageID,ChestGui gui){
         int x_lock= storePage.amount_unlock%8;
         int y_lock=storePage.amount_unlock/8;
         for(;y_lock<6;y_lock++){
@@ -107,11 +111,16 @@ public class Gui {
                 int finalX_lock = x_lock;
                 page.addItem(new GuiItem(UnlockIcon(pageID), x->{x.setCancelled(true);
                     int slot=finalY_lock*8+finalX_lock;
-                   if( storePage.unlock(slot)){
-                       if(slot==47)//是否时本页最后一个槽位
+                   if( storePage.unlock(slot)){//尝试解锁
+                       if(slot==47)//是否是本页最后一个槽位
                        {
-
+                            PlayerData.addPage(((OfflinePlayer)player).getUniqueId());//解锁新页
                        }
+                       SoundUtils.playSound(player,PageConfig.getUnlock_sound());
+                       gui.getInventory().setItem(finalY_lock*9+finalX_lock,null);
+                       player.closeInventory();
+                       Msg.msg(player.getUniqueId(),"解锁");
+                       Bukkit.getScheduler().runTaskLater(StoreSpace.plugin,()->{showPage(pageID);},1);
                    }
                 }),x_lock,y_lock);
 
