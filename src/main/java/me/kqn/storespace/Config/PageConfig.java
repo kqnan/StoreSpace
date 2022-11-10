@@ -65,6 +65,7 @@ public class PageConfig {
             unlock_sound=Sound.valueOf(file.getString("sound_unlock").toUpperCase());
             noperm_sound= Sound.valueOf(file.getString("sound_noperm").toUpperCase());
             page_sound=Sound.valueOf(file.getString("sound_page").toUpperCase());
+            msg_nomoney=file.getStringList("msg_nomoney");
         }catch (Exception e){
             e.printStackTrace();
         }

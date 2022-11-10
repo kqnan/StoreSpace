@@ -28,7 +28,7 @@ public class PlayerData {
         for (int i = 0; i < playerData.storePages.length; i++) {
             tmp[i]=playerData.storePages[i];
         }
-        tmp[playerData.storePages.length]=new StorePage(pID);
+        tmp[playerData.storePages.length]=new StorePage(pID,0);
         playerData.storePages=tmp;
     }
 }

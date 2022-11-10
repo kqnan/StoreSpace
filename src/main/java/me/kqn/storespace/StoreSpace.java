@@ -3,6 +3,7 @@ package me.kqn.storespace;
 import me.kqn.storespace.Command.MainCommand;
 import me.kqn.storespace.Config.MessageConfig;
 import me.kqn.storespace.Config.PageConfig;
+import me.kqn.storespace.Config.PageIcon;
 import me.kqn.storespace.Integretion.Economy.Economy;
 import me.kqn.storespace.Integretion.Economy.Vault;
 import me.kqn.storespace.Integretion.Permission.DefaultPerm;
@@ -24,10 +25,11 @@ public static StoreSpace plugin;
 
     }
     public void loadConfig(){
+        PageIcon.read();
         PageConfig.read();
         MessageConfig.read();
     }
-    private void initIntegretion(){
+    public void initIntegretion(){
         if(Bukkit.getPluginManager().isPluginEnabled("Vault")){
             economy=new Vault();
             Msg.Log("Vault挂钩");

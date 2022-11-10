@@ -129,26 +129,26 @@ public class Gui {
         }
     }
     private ItemStack slideIcon(int pageID){
-        PageIcon.Icon icon= PageIcon.getSlideIcon(pData.storePages.length,pageID);
+        PageIcon.Icon icon= PageIcon.getSlideIcon(pData.storePages.length-1,pageID);
         return new ItemBuilder(icon.material).setLore(icon.lore).setCustomModelData(icon.custommodeldata)
                 .setName(icon.name).build();
 
     }
     private ItemStack preIcon(int pageID){
-        PageIcon.Icon icon= PageIcon.getPreIcon(pData.storePages.length,pageID);
+        PageIcon.Icon icon= PageIcon.getPreIcon(pData.storePages.length-1,pageID);
         return new ItemBuilder(icon.material).setLore(icon.lore).setCustomModelData(icon.custommodeldata)
                 .setName(icon.name).build();
 
     }
     private ItemStack nextIcon(int pageID){
-        PageIcon.Icon icon= PageIcon.getPreIcon(pData.storePages.length,pageID);
+        PageIcon.Icon icon= PageIcon.getNextIcon(pData.storePages.length-1,pageID);
         return new ItemBuilder(icon.material).setLore(icon.lore).setCustomModelData(icon.custommodeldata)
                 .setName(icon.name).build();
 
     }
     private ItemStack UnlockIcon(int pageID){
 
-            PageIcon.Icon icon= PageIcon.getUnlockIcon(pData.storePages.length,pageID);
+            PageIcon.Icon icon= PageIcon.getUnlockIcon(pData.storePages.length-1,pageID);
         return new ItemBuilder(icon.material).setLore(icon.lore).setCustomModelData(icon.custommodeldata)
                 .setName(icon.name).build();
 

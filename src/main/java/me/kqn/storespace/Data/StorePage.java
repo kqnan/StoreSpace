@@ -24,7 +24,15 @@ public class StorePage {
         this.pID=player;
         unlocked=new boolean[amount_unlock];
         Arrays.fill(unlocked, false);
-        for(int i=0;i<7;i++)unlocked[i]=true;
+        for(int i=0;i<amount_unlock;i++)unlocked[i]=true;
+        contents=new ItemStack[amount_unlock];
+    }
+    public StorePage(UUID player,int unlock_init){
+        this.pID=player;
+        this.amount_unlock=unlock_init;
+        unlocked=new boolean[amount_unlock];
+        Arrays.fill(unlocked, false);
+        for(int i=0;i<amount_unlock;i++)unlocked[i]=true;
         contents=new ItemStack[amount_unlock];
     }
 
