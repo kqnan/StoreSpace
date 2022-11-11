@@ -1,0 +1,11 @@
+#存储数据的方式：file（文件形式存储） mysql（数据库形式）
+datasource: file
+#数据库相关配置，如果datasource用mysql则要填写
+mysql:
+  host: localhost
+  port: 3306
+  database: mysqldatabase
+  username: root
+  password: 1234
+#最大的页数
+maxPages: 3

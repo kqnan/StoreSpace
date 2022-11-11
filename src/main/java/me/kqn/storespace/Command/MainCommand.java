@@ -1,21 +1,46 @@
 package me.kqn.storespace.Command;
 
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import de.tr7zw.changeme.nbtapi.NBTContainer;
+import de.tr7zw.changeme.nbtapi.NBTItem;
+import me.kqn.storespace.Data.PlayerData;
 import me.kqn.storespace.Gui.Gui;
 import me.kqn.storespace.StoreSpace;
+import me.kqn.storespace.Utils.ItemBuilder;
+import me.kqn.storespace.Utils.ItemStackSerializer;
 import me.kqn.storespace.Utils.Msg;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class MainCommand implements CommandExecutor , TabCompleter {
     String prefix="[StoreSpace]";
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if(sender instanceof Player && sender.isOp()){
+            if(args[0].equals("save")){
+                PlayerData playerData=PlayerData.getPlayerData((Player)sender);
+                UUID uuid=((OfflinePlayer)sender).getUniqueId();
+                StoreSpace.plugin.dataSource.write(playerData,uuid);
+
+            }
+            if(args[0].equals("load")){
+                PlayerData playerData= StoreSpace.plugin.dataSource.readToPlayerData(((OfflinePlayer)sender).getUniqueId());
+                PlayerData.setData(((OfflinePlayer)sender).getUniqueId(),playerData);
+            }
+        }
         if(args.length>1&&args[0].equalsIgnoreCase("open")){
             if((sender instanceof Player && sender.isOp())||(sender instanceof ConsoleCommandSender)){
                 Player player=Bukkit.getPlayerExact(args[1]);

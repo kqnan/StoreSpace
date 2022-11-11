@@ -14,13 +14,14 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Arrays;
 import java.util.UUID;
 
-public class StorePage {
+public class StorePage extends JsonStorePage{
     // TODO: 2022/11/10 多线程问题，容易引发错误 
-    private UUID pID;
-    public int amount_unlock=7;
-    public boolean[] unlocked=null;
-    public ItemStack[] contents=null;
+
+    public StorePage(){
+        super();
+    }
     public StorePage(UUID player){
+        super();
         this.pID=player;
         unlocked=new boolean[amount_unlock];
         Arrays.fill(unlocked, false);

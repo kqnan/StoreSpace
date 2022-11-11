@@ -119,7 +119,7 @@ public class Gui {
                        SoundUtils.playSound(player,PageConfig.getUnlock_sound());
                        gui.getInventory().setItem(finalY_lock*9+finalX_lock,null);
                        player.closeInventory();
-                       Msg.msg(player.getUniqueId(),"解锁");
+                       Msg.msg(((OfflinePlayer)player).getUniqueId(),"解锁");
                        Bukkit.getScheduler().runTaskLater(StoreSpace.plugin,()->{showPage(pageID);},1);
                    }
                 }),x_lock,y_lock);
