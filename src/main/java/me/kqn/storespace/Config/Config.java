@@ -46,6 +46,22 @@ public class Config {
     private static String mysql_database;
     private static String mysql_username;
     private static String mysql_password;
+    private static String gems_singular;
+
+    public static String getGems_singular() {
+        return gems_singular;
+    }
+
+    public static String getGems_plural() {
+        return gems_plural;
+    }
+
+    public static String getGems_id() {
+        return gems_id;
+    }
+
+    private static String gems_plural;
+    private static String gems_id;
 
     public static String getDatasource() {
         if(datasource==null){
@@ -65,6 +81,9 @@ public class Config {
             mysql_database=file.getString("mysql.database");
             mysql_username=file.getString("mysql.username");
             mysql_password=file.getString("mysql.password");
+            gems_singular=file.getString("GemsEconomy.Singular");
+            gems_plural=file.getString("GemsEconomy.Plural");
+            gems_id=file.getString("GemsEconomy.ID");
             autosave_interval=Double.parseDouble(file.getString("autosave.interval_minutes"));
         } catch (Exception e) {
             Msg.Log("[StoreSpace]读取Config.yml时出错，启用内置默认值");

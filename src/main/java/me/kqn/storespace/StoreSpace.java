@@ -10,6 +10,7 @@ import me.kqn.storespace.Data.PlayerData;
 import me.kqn.storespace.Integretion.Drop.DropDefault;
 import me.kqn.storespace.Integretion.Drop.DropIntegretion;
 import me.kqn.storespace.Integretion.Economy.Economy;
+import me.kqn.storespace.Integretion.Economy.GemsEco;
 import me.kqn.storespace.Integretion.Economy.Vault;
 import me.kqn.storespace.Integretion.Permission.DefaultPerm;
 import me.kqn.storespace.Integretion.Permission.Permission;
@@ -101,6 +102,10 @@ public static StoreSpace plugin;
         if(Bukkit.getPluginManager().isPluginEnabled("Vault")){
             economy=new Vault();
             Msg.Log("Vault挂钩");
+        }
+        if(Bukkit.getPluginManager().isPluginEnabled("GemsEconomy")){
+            economy=new GemsEco();
+            Msg.Log("GemsEconomy挂钩");
         }
         permission=new DefaultPerm();
         dropIntegretion=new ArrayList<>();

@@ -40,6 +40,7 @@ public class Gui {
         float percent=(float)(pageID +1)/(float)pData.storePages.length;
         int slidepos=(int)(4.0*percent);
         if(slidepos==0)slidepos=1;
+        slidepos=1;
         int finalSlidepos = slidepos;
         //阻止滑条栏放置物品
         gui.setOnGlobalClick(x->{
@@ -98,8 +99,9 @@ public class Gui {
             }x.setCancelled(true);}),0,5);
 
             //滑块
-           // spane.addItem(new GuiItem(slideIcon(pageID),x->{x.setCancelled(true);}),0,slidepos);
-        spane.addItem(new GuiItem(slideIcon(pageID),x->{x.setCancelled(true);}),0,1);
+           //  slidepos=1;
+            spane.addItem(new GuiItem(slideIcon(pageID),x->{x.setCancelled(true);}),0,slidepos);
+       // spane.addItem(new GuiItem(slideIcon(pageID),x->{x.setCancelled(true);}),0,1);
             gui.addPane(spane);
             gui.setOnClose(x->CallonClose(gui,x,pageID));
             gui.show(player);
