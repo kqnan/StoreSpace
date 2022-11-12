@@ -3,6 +3,7 @@ package me.kqn.storespace.Gui;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
+import me.kqn.storespace.Config.MessageConfig;
 import me.kqn.storespace.Config.PageConfig;
 import me.kqn.storespace.Config.PageIcon;
 import me.kqn.storespace.Data.PlayerData;
@@ -95,10 +96,6 @@ public class Gui {
                 page_current++;
                 Bukkit.getScheduler().runTaskLater(StoreSpace.plugin,()->{showPage(pageID+1);},1);
             }x.setCancelled(true);}),0,5);
-
-
-
-
             //滑块
             spane.addItem(new GuiItem(slideIcon(pageID),x->{x.setCancelled(true);}),0,slidepos);
             gui.addPane(spane);
@@ -121,8 +118,8 @@ public class Gui {
                        }
                        SoundUtils.playSound(player,PageConfig.getUnlock_sound());
                        gui.getInventory().setItem(finalY_lock*9+finalX_lock,null);
-                       player.closeInventory();
-                       Msg.msg(((OfflinePlayer)player).getUniqueId(),"解锁");
+                       //player.closeInventory();
+                       Msg.msg(((OfflinePlayer)player).getUniqueId(), MessageConfig.unlock);
                        Bukkit.getScheduler().runTaskLater(StoreSpace.plugin,()->{showPage(pageID);},1);
                    }
                 }),x_lock,y_lock);
