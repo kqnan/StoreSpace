@@ -53,7 +53,7 @@ public static StoreSpace plugin;
             dataSource=new Mysql();
         }
         //在插件开始时异步加载一次玩家数据。
-        loadPlayerData_Async();
+      //  loadPlayerData_Async();
         //开始定时保存
         if(Config.getAutosave_interval()>=1){
              autosaveTask=autoSave((long) Config.getAutosave_interval());

@@ -23,7 +23,7 @@ public class JsonFile implements DataSource {
     @Override
     public PlayerData readToPlayerData(UUID uuid) {
         File fileFolder=new File(folder);
-        if(!fileFolder.exists())fileFolder.mkdir();
+        if(!fileFolder.exists())fileFolder.mkdir();//文件夹不存在就创建
         File[] datafiles=fileFolder.listFiles();
         if(datafiles==null)return new PlayerData(uuid);
         for (File datafile : datafiles) {

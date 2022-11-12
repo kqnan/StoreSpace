@@ -15,7 +15,7 @@ public class Listeners implements Listener {
     @EventHandler
     public void loadOnLogin(PlayerLoginEvent event){
         UUID uuid=((OfflinePlayer)event.getPlayer()).getUniqueId();
-        System.out.println(uuid);
+
         Bukkit.getScheduler().runTaskAsynchronously(StoreSpace.plugin,()-> {
             PlayerData playerData=StoreSpace.plugin.dataSource.readToPlayerData(uuid);//第一次进游戏会read不到，需要给一个默认值
             playerData.isPrepared=true;//设置玩家数据准备好了

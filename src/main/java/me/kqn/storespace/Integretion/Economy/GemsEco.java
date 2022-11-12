@@ -12,8 +12,7 @@ public class GemsEco implements Economy{
     private Currency currency;
     public GemsEco (){
         api=new GemsEconomyAPI();
-        currency=new Currency(UUID.fromString(Config.getGems_id()),Config.getGems_singular(),Config.getGems_plural());
-
+        currency=api.getCurrency(Config.getGems_singular());
     }
     @Override
     public void take(OfflinePlayer player, double amount) {
@@ -22,8 +21,10 @@ public class GemsEco implements Economy{
 
     @Override
     public boolean has(OfflinePlayer player, double amount) {
+
         double balance=api.getBalance(player.getUniqueId(),currency);
-        return amount>=balance;
+
+        return amount<=balance;
     }
 
     @Override
