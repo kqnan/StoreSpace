@@ -133,7 +133,13 @@
             <groupId>jep</groupId>
             <artifactId>jep</artifactId>
             <version>2.24</version>
-
+        </dependency>
+        <dependency>
+            <groupId>com.xanium.gemseconomy</groupId>
+            <artifactId>GemsEconomy</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/GemsEconomy-4.9.2.jar</systemPath>
         </dependency>
 
     </dependencies>

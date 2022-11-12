@@ -97,11 +97,9 @@ public class Gui {
                 Bukkit.getScheduler().runTaskLater(StoreSpace.plugin,()->{showPage(pageID+1);},1);
             }x.setCancelled(true);}),0,5);
 
-
-
-
             //滑块
-            spane.addItem(new GuiItem(slideIcon(pageID),x->{x.setCancelled(true);}),0,slidepos);
+           // spane.addItem(new GuiItem(slideIcon(pageID),x->{x.setCancelled(true);}),0,slidepos);
+        spane.addItem(new GuiItem(slideIcon(pageID),x->{x.setCancelled(true);}),0,1);
             gui.addPane(spane);
             gui.setOnClose(x->CallonClose(gui,x,pageID));
             gui.show(player);
