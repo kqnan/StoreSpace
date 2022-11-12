@@ -33,12 +33,15 @@ public class PlayerData   {
         }
         return pDatas.get(uuid);
     }
-
+    public static void remove(UUID uuid){
+        pDatas.remove(uuid);
+    }
 
     public static Map<UUID,PlayerData> getData(){
         return pDatas;
     }
     public static void setData(UUID player,PlayerData playerData) {
+
         pDatas.put(player,playerData);
     }
     public PlayerData (){
@@ -85,7 +88,6 @@ public class PlayerData   {
         return jsonArray;
     }
     public static PlayerData fromJson(JsonElement jsonElement){
-
         JsonArray jsonArray=(JsonArray) jsonElement;
         PlayerData playerData=new PlayerData();
         playerData.storePages=new StorePage[jsonArray.size()];

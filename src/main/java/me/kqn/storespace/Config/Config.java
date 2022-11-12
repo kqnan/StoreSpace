@@ -47,6 +47,7 @@ public class Config {
     private static String mysql_username;
     private static String mysql_password;
     private static String gems_singular;
+    private static int load_delay;
 
     public static String getGems_singular() {
         return gems_singular;
@@ -59,6 +60,11 @@ public class Config {
     public static String getGems_id() {
         return gems_id;
     }
+    private static Boolean debug;
+
+    public static Boolean getDebug() {
+        return debug;
+    }
 
     private static String gems_plural;
     private static String gems_id;
@@ -68,6 +74,10 @@ public class Config {
             return "file";
         }
         return datasource;
+    }
+
+    public static int getLoad_delay() {
+        return load_delay;
     }
 
     public static void read() {
@@ -85,10 +95,13 @@ public class Config {
             gems_plural=file.getString("GemsEconomy.Plural");
             gems_id=file.getString("GemsEconomy.ID");
             autosave_interval=Double.parseDouble(file.getString("autosave.interval_minutes"));
+            load_delay=Integer.parseInt(file.getString("load_delay"));
+            debug=Boolean.parseBoolean(file.getString("debug"));
         } catch (Exception e) {
             Msg.Log("[StoreSpace]读取Config.yml时出错，启用内置默认值");
             e.printStackTrace();
             maxPages=3;
+            load_delay=20;
             autosave_interval=1;
         }
     }
