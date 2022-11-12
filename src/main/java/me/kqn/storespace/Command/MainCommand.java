@@ -13,6 +13,8 @@ import me.kqn.storespace.StoreSpace;
 import me.kqn.storespace.Utils.ItemBuilder;
 import me.kqn.storespace.Utils.ItemStackSerializer;
 import me.kqn.storespace.Utils.Msg;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.HoverEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -31,12 +33,14 @@ public class MainCommand implements CommandExecutor , TabCompleter {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(sender instanceof Player && sender.isOp()){
             if(args[0].equals("save")){
+                //开发者命令
                 PlayerData playerData=PlayerData.getPlayerData((Player)sender);
                 UUID uuid=((OfflinePlayer)sender).getUniqueId();
                 StoreSpace.plugin.dataSource.write(playerData,uuid);
 
             }
             if(args[0].equals("load")){
+                //开发者命令
                 PlayerData playerData= StoreSpace.plugin.dataSource.readToPlayerData(((OfflinePlayer)sender).getUniqueId());
                 PlayerData.setData(((OfflinePlayer)sender).getUniqueId(),playerData);
             }
@@ -48,10 +52,12 @@ public class MainCommand implements CommandExecutor , TabCompleter {
                     Msg.msg(sender,prefix+"该玩家不存在");
                 }
                 else {
+
                     Gui gui=new Gui(player);
                     gui.showPage(0);
                 }
             }
+            return true;
         }
         if(args.length==1&&args[0].equalsIgnoreCase("reload")){
             if((sender instanceof Player && sender.isOp())||(sender instanceof ConsoleCommandSender)){
@@ -59,6 +65,10 @@ public class MainCommand implements CommandExecutor , TabCompleter {
                 StoreSpace.plugin.initIntegretion();
                 Msg.msg(sender,prefix+"重新载入了配置文件和挂钩");
             }
+            return true;
+        }
+        if(sender.isOp()||sender instanceof ConsoleCommandSender){
+            sendHelp(sender);
         }
         return true;
     }
@@ -78,5 +88,13 @@ public class MainCommand implements CommandExecutor , TabCompleter {
             }
         }
         return null;
+    }
+    public void sendHelp(CommandSender sender){
+        Msg.msg(sender,"§7§m--------------------------------------");
+        Msg.msg(sender,"§6<> §7- §d必填");
+        Msg.msg(sender,"&e/ss open <玩家名> §b- §a为玩家打开存储空间");
+        Msg.msg(sender,"&e/ss reload &b- &a重载配置文件");
+       // Msg.msg(sender,"&e/ss clear <玩家名> &b- &a清除玩家的存储空间");
+        Msg.msg(sender,"§7§m--------------------------------------");
     }
 }

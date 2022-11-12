@@ -36,6 +36,11 @@ public class Config {
         return mysql_password;
     }
 
+    public static double getAutosave_interval() {
+        return autosave_interval;
+    }
+
+    private static double autosave_interval;
     private static String mysql_host;
     private static String mysql_port;
     private static String mysql_database;
@@ -60,10 +65,12 @@ public class Config {
             mysql_database=file.getString("mysql.database");
             mysql_username=file.getString("mysql.username");
             mysql_password=file.getString("mysql.password");
+            autosave_interval=Double.parseDouble(file.getString("autosave.interval_minutes"));
         } catch (Exception e) {
             Msg.Log("[StoreSpace]读取Config.yml时出错，启用内置默认值");
             e.printStackTrace();
             maxPages=3;
+            autosave_interval=1;
         }
     }
 }

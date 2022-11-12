@@ -12,11 +12,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerData   {
     // TODO: 2022/11/10 多线程问题，storepages 
-    private static HashMap<UUID,PlayerData> pDatas=new HashMap<>();
+    private static ConcurrentHashMap<UUID,PlayerData> pDatas=new ConcurrentHashMap<>();
     public static PlayerData getPlayerData(Player player){
         return getPlayerData(((OfflinePlayer)player).getUniqueId());
     }
@@ -25,6 +27,7 @@ public class PlayerData   {
         if(!pDatas.containsKey(uuid)){
             PlayerData playerData=new PlayerData();
             playerData.storePages[0]=new StorePage(uuid);
+            playerData.uuid=uuid;
             pDatas.put(uuid,playerData);
 
         }
@@ -32,14 +35,21 @@ public class PlayerData   {
     }
 
 
-
+    public static Map<UUID,PlayerData> getData(){
+        return pDatas;
+    }
     public static void setData(UUID player,PlayerData playerData) {
         pDatas.put(player,playerData);
     }
     public PlayerData (){
-
+    }
+    public PlayerData (UUID uuid){
+        storePages[0]=new StorePage(uuid);
+        this.uuid=uuid;
     }
     public StorePage[] storePages=new StorePage[1];
+    public UUID uuid;
+    public boolean isPrepared=false;
     public static void addPage(UUID pID){
         PlayerData playerData=pDatas.get(pID);
         if(playerData.storePages.length>= Config.getMaxPages())return;
@@ -51,6 +61,10 @@ public class PlayerData   {
         playerData.storePages=tmp;
     }
     public static JsonElement toJson(PlayerData playerData){
+        if(playerData.storePages==null){//如果传入一个损坏的或是无效的数据则新建。
+            playerData.storePages=new StorePage[1];
+            playerData.storePages[0]=new StorePage(playerData.uuid);
+        }
         JsonArray jsonArray=new JsonArray();
         for (StorePage storePage : playerData.storePages) {
             JsonObject jsonPage=new JsonObject();
@@ -94,6 +108,7 @@ public class PlayerData   {
                 page.contents[i++]=NBTItem.convertNBTtoItem(new NBTContainer(content.getAsString()));
             }
             playerData.storePages[j++]=page;
+            playerData.uuid=page.pID;
         }
         return playerData;
     }

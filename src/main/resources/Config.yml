@@ -9,3 +9,6 @@ mysql:
   password: 1234
 #最大的页数
 maxPages: 3
+autosave:
+  interval_minutes: 1 #1分钟自动保存一次所有玩家数据
+

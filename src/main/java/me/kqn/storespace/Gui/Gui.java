@@ -20,6 +20,8 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.concurrent.CompletableFuture;
+
 public class Gui {
     Player player;
     PlayerData pData;
@@ -31,8 +33,9 @@ public class Gui {
     }
 
     public void showPage(int pageID){
+        if(!pData.isPrepared)return;
         if(pData.storePages.length<=pageID||pageID<0)return;
-        ChestGui gui=new ChestGui(6,"储存空间");
+        ChestGui gui=new ChestGui(6,PageIcon.getTitle(pData.storePages.length-1,pageID));
         float percent=(float)(pageID +1)/(float)pData.storePages.length;
         int slidepos=(int)(4.0*percent);
         if(slidepos==0)slidepos=1;

@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import me.kqn.storespace.Data.PlayerData;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
@@ -16,12 +17,15 @@ import java.util.UUID;
 public class JsonFile implements DataSource {
     String folder="plugins\\StoreSpace\\data";
 
+    /**
+     * 若读取到错误数据则返回空的playerdata
+     * */
     @Override
     public PlayerData readToPlayerData(UUID uuid) {
         File fileFolder=new File(folder);
         if(!fileFolder.exists())fileFolder.mkdir();
         File[] datafiles=fileFolder.listFiles();
-        if(datafiles==null)return new PlayerData();
+        if(datafiles==null)return new PlayerData(uuid);
         for (File datafile : datafiles) {
             if(datafile.getName().replace(".json","").equals(uuid.toString())){
                 try {
@@ -30,17 +34,18 @@ public class JsonFile implements DataSource {
                     fis.read(bytes);
                     String json;
                     json=DataSource.Gunzip(bytes);
-                    System.out.println("读入："+json);
+
                     Gson gson=new Gson();
                     JsonArray jsondata= gson.fromJson(json,JsonArray.class);
                     fis.close();
                     return PlayerData.fromJson(jsondata);
                 }catch (Exception e){
                     e.printStackTrace();
+
                 }
             }
         }
-        return null;
+        return new PlayerData(uuid);
     }
 
     @Override
@@ -57,13 +62,20 @@ public class JsonFile implements DataSource {
         }
         try {
             String json=PlayerData.toJson(playerData).toString();
-            System.out.println("输出："+json);
+
             byte[] bytes=DataSource.Gzip(json);
             FileOutputStream fos=new FileOutputStream(datafile);
             fos.write(bytes);
             fos.close();
         }catch (Exception e){
             e.printStackTrace();
+        }
+    }
+    @Override
+    public void onDisable(){
+       Map<UUID,PlayerData> dataMap= PlayerData.getData();
+        for (UUID uuid : dataMap.keySet()) {
+            write(dataMap.get(uuid),uuid);
         }
     }
 

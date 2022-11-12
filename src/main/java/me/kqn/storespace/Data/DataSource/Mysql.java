@@ -5,6 +5,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import me.kqn.storespace.Config.Config;
 import me.kqn.storespace.Data.PlayerData;
+import me.kqn.storespace.StoreSpace;
+import org.bukkit.Bukkit;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,10 +27,10 @@ public class Mysql implements DataSource {
         this.userpw=Config.getMysql_password();
         this.database=Config.getMysql_database();
         this.url="jdbc:mysql://"+Config.getMysql_host()+":"+Config.getMysql_port()+"/"+database+"?autoReconnect=true";
-        System.out.println(this.url);
+
         try {
             connection= DriverManager.getConnection(url,username,userpw);
-           createTable();
+            Bukkit.getScheduler().runTaskAsynchronously(StoreSpace.plugin,this::createTable);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -57,14 +59,19 @@ public class Mysql implements DataSource {
             ResultSet result=  statement.executeQuery();
             if(result.next()){
               bytes=  result.getBytes("Data");
+              statement.close();
             }
-            statement.close();
+            else {//如果查询不到
+              statement.close();
+              return new PlayerData(uuid);
+            }
+
         }catch (Exception e){
             e.printStackTrace();
+            return new PlayerData(uuid);
         }
         String json=DataSource.Gunzip(bytes);
-        System.out.println(json);
-        System.out.println(json.length());
+
         Gson gson=new Gson();
         JsonArray jsonArray=gson.fromJson(json, JsonArray.class);
         return PlayerData.fromJson(jsonArray);
@@ -83,6 +90,18 @@ public class Mysql implements DataSource {
             statement.close();
         }catch (Exception e){
             e.printStackTrace();
+        }
+    }
+    @Override
+    public void onDisable(){
+        Map<UUID,PlayerData> dataMap=PlayerData.getData();
+        for (UUID uuid : dataMap.keySet()) {
+            write(dataMap.get(uuid),uuid);
+        }
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }

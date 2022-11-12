@@ -57,4 +57,5 @@ public interface DataSource {
     }
     public PlayerData readToPlayerData(UUID uuid);
     public void write(PlayerData playerData,UUID uuid);
+    public void onDisable();
 }
