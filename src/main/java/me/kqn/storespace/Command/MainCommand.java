@@ -31,18 +31,20 @@ public class MainCommand implements CommandExecutor , TabCompleter {
     String prefix="[StoreSpace]";
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(sender instanceof Player && sender.isOp()){
-            if(args[0].equals("save")){
-                //开发者命令
-                PlayerData playerData=PlayerData.getPlayerData((Player)sender);
-                UUID uuid=((OfflinePlayer)sender).getUniqueId();
-                StoreSpace.plugin.dataSource.write(playerData,uuid);
+        if(args.length==1){
+            if(sender instanceof Player && sender.isOp()){
+                if(args[0].equals("save")){
+                    //开发者命令
+                    PlayerData playerData=PlayerData.getPlayerData((Player)sender);
+                    UUID uuid=((OfflinePlayer)sender).getUniqueId();
+                    StoreSpace.plugin.dataSource.write(playerData,uuid);
 
-            }
-            if(args[0].equals("load")){
-                //开发者命令
-                PlayerData playerData= StoreSpace.plugin.dataSource.readToPlayerData(((OfflinePlayer)sender).getUniqueId());
-                PlayerData.setData(((OfflinePlayer)sender).getUniqueId(),playerData);
+                }
+                if(args[0].equals("load")){
+                    //开发者命令
+                    PlayerData playerData= StoreSpace.plugin.dataSource.readToPlayerData(((OfflinePlayer)sender).getUniqueId());
+                    PlayerData.setData(((OfflinePlayer)sender).getUniqueId(),playerData);
+                }
             }
         }
         if(args.length>1&&args[0].equalsIgnoreCase("open")){

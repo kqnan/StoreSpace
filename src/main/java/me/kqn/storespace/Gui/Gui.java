@@ -17,6 +17,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -24,6 +25,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.concurrent.CompletableFuture;
 
 public class Gui {
+    // TODO: 2022/11/12 shift左键有bug
     Player player;
     PlayerData pData;
     int page_current=0;
@@ -37,6 +39,7 @@ public class Gui {
         if(!pData.isPrepared)return;
         if(pData.storePages.length<=pageID||pageID<0)return;
         ChestGui gui=new ChestGui(6,PageIcon.getTitle(pData.storePages.length-1,pageID));
+
         float percent=(float)(pageID +1)/(float)pData.storePages.length;
         int slidepos=(int)(4.0*percent);
         if(slidepos==0)slidepos=1;
@@ -44,6 +47,7 @@ public class Gui {
         int finalSlidepos = slidepos;
         //阻止滑条栏放置物品
         gui.setOnGlobalClick(x->{
+
             Bukkit.getScheduler().runTaskLater(StoreSpace.plugin,()->{
                 Inventory inv=gui.getInventory();
 
@@ -113,7 +117,9 @@ public class Gui {
             for(;x_lock<8;x_lock++){
                 int finalY_lock = y_lock;
                 int finalX_lock = x_lock;
-                page.addItem(new GuiItem(UnlockIcon(pageID), x->{x.setCancelled(true);
+                page.addItem(new GuiItem(UnlockIcon(pageID,finalY_lock*8+finalX_lock), x->{x.setCancelled(true);
+                    if(!(x.getClick()==ClickType.LEFT||x.getClick()==ClickType.RIGHT))return;
+                    //如果不是左键或者右键点的，那么返回，防止卡bug
                     int slot=finalY_lock*8+finalX_lock;
                    if( storePage.unlock(slot)){//尝试解锁
                        if(slot==47)//是否是本页最后一个槽位
@@ -122,7 +128,7 @@ public class Gui {
                        }
                        SoundUtils.playSound(player,PageConfig.getUnlock_sound());
                        gui.getInventory().setItem(finalY_lock*9+finalX_lock,null);
-//                       player.closeInventory();
+                       player.closeInventory();
                        Msg.msg(((OfflinePlayer)player).getUniqueId(), MessageConfig.unlock);
                        Bukkit.getScheduler().runTaskLater(StoreSpace.plugin,()->{showPage(pageID);},1);
                    }
@@ -150,9 +156,9 @@ public class Gui {
                 .setName(icon.name).build();
 
     }
-    private ItemStack UnlockIcon(int pageID){
+    private ItemStack UnlockIcon(int pageID,int slot){
 
-            PageIcon.Icon icon= PageIcon.getUnlockIcon(pData.storePages.length-1,pageID);
+            PageIcon.Icon icon= PageIcon.getUnlockIcon(pData.storePages.length-1,pageID,slot);
         return new ItemBuilder(icon.material).setLore(icon.lore).setCustomModelData(icon.custommodeldata)
                 .setName(icon.name).build();
 
