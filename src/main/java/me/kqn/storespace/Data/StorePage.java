@@ -37,7 +37,7 @@ public class StorePage extends JsonStorePage{
         contents=new ItemStack[amount_unlock];
     }
 
-    public boolean unlock(int slot){
+    public boolean unlock(int pageID,int slot){
         OfflinePlayer player=Bukkit.getOfflinePlayer(pID);
         if(!(0<=slot&&slot<=47)){
             throw new RuntimeException("解锁的槽位必须在0~47之间");
@@ -48,14 +48,15 @@ public class StorePage extends JsonStorePage{
             Msg.msg(pID, MessageConfig.cannot_unlock);
             return false;
         }
+
         //检查经济是否足够
-        double moneyNeed= ExpParser.parseMathExpression(PageConfig.getMoeny_unlock(slot));//获取需要多少金币解锁%slot%号槽位
+        double moneyNeed= ExpParser.parseMathExpression(PageConfig.getMoeny_unlock(slot+pageID*45));//获取需要多少金币解锁%slot%号槽位
         if(!StoreSpace.plugin.economy.has(Bukkit.getOfflinePlayer(pID),moneyNeed)){//如果没有足够的金币
             Msg.msg(pID,PageConfig.getMsg_nomoney(slot));//发送金币不足消息
             return false;
         }
         //检查权限是否有
-        String permNeed=PageConfig.getPerm_unlock(slot);
+        String permNeed=PageConfig.getPerm_unlock(slot+pageID*45);
         if(!StoreSpace.plugin.permission.hasPerm(pID,permNeed)){//如果没有
             Msg.msg(pID,PageConfig.getMsg_noperm(slot));
             if(player.isOnline()){

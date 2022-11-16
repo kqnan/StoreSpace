@@ -121,7 +121,7 @@ public class Gui {
                     if(!(x.getClick()==ClickType.LEFT||x.getClick()==ClickType.RIGHT))return;
                     //如果不是左键或者右键点的，那么返回，防止卡bug
                     int slot=finalY_lock*8+finalX_lock;
-                   if( storePage.unlock(slot)){//尝试解锁
+                   if( storePage.unlock(pageID,slot)){//尝试解锁
                        if(slot==47)//是否是本页最后一个槽位
                        {
                             PlayerData.addPage(((OfflinePlayer)player).getUniqueId());//解锁新页

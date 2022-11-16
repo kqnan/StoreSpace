@@ -45,6 +45,7 @@ public static StoreSpace plugin;
         Bukkit.getPluginManager().registerEvents(new DropListener(),this);
         loadConfig();
         initIntegretion();
+        
         //设定数据源
         if(Config.getDatasource().equalsIgnoreCase("file")){
             dataSource=new JsonFile();
