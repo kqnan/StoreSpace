@@ -7,6 +7,7 @@ import me.kqn.storespace.Config.Config;
 import me.kqn.storespace.Data.PlayerData;
 import me.kqn.storespace.StoreSpace;
 import org.bukkit.Bukkit;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,6 +23,7 @@ public class Mysql implements DataSource {
     private String url;
     private String database;
     private Connection connection;
+    private BukkitTask timer;
     public Mysql(){
         this.username= Config.getMysql_username();
         this.userpw=Config.getMysql_password();
@@ -31,6 +33,16 @@ public class Mysql implements DataSource {
         try {
             connection= DriverManager.getConnection(url,username,userpw);
             Bukkit.getScheduler().runTaskAsynchronously(StoreSpace.plugin,this::createTable);
+            //每5分钟发送一次请求，确保连接不超时
+            timer=Bukkit.getScheduler().runTaskTimerAsynchronously(StoreSpace.plugin,()->{
+                String SELECT = "SELECT * FROM StoreSpace WHERE UUID=123";
+                try {
+                    PreparedStatement statement = connection.prepareStatement(SELECT);
+                    ResultSet resultSet= statement.executeQuery();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            },6000,6000);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -94,6 +106,7 @@ public class Mysql implements DataSource {
     }
     @Override
     public void onDisable(){
+        if(this.timer!=null)this.timer.cancel();
         Map<UUID,PlayerData> dataMap=PlayerData.getData();
         for (UUID uuid : dataMap.keySet()) {
             write(dataMap.get(uuid),uuid);
