@@ -3,6 +3,7 @@ package me.kqn.storespace;
 import me.kqn.storespace.Command.MainCommand;
 import me.kqn.storespace.Config.*;
 import me.kqn.storespace.Data.DataSource.DataSource;
+import me.kqn.storespace.Data.DataSource.Database;
 import me.kqn.storespace.Data.DataSource.JsonFile;
 import me.kqn.storespace.Data.DataSource.Mysql;
 import me.kqn.storespace.Data.Listeners;
@@ -51,7 +52,7 @@ public static StoreSpace plugin;
             dataSource=new JsonFile();
         }
         else if(Config.getDatasource().equalsIgnoreCase("mysql")){
-            dataSource=new Mysql();
+            dataSource=new Database();
         }
         //在插件开始时异步加载一次玩家数据。
       //  loadPlayerData_Async();
@@ -81,7 +82,7 @@ public static StoreSpace plugin;
             dataSource=new JsonFile();
         }
         else if(Config.getDatasource().equalsIgnoreCase("mysql")){
-            dataSource=new Mysql();
+            dataSource=new Database();
         }
        if(autosaveTask!=null) {
            autosaveTask.cancel();

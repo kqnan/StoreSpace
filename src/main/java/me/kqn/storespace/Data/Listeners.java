@@ -22,6 +22,7 @@ public class Listeners implements Listener {
             playerData.isPrepared=true;//设置玩家数据准备好了
             PlayerData.setData(uuid,playerData);//把玩家数据加入到表中。
         }, Config.getLoad_delay());
+
     }
     @EventHandler
     public void saveOnLogout(PlayerQuitEvent event){

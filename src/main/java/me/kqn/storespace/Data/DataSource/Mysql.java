@@ -14,6 +14,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.util.Map;
+import java.util.Properties;
 import java.util.UUID;
 
 public class Mysql implements DataSource {
@@ -33,6 +34,10 @@ public class Mysql implements DataSource {
         try {
             connection= DriverManager.getConnection(url,username,userpw);
             Bukkit.getScheduler().runTaskAsynchronously(StoreSpace.plugin,this::createTable);
+            Properties properties=new Properties();
+
+            DriverManager.getConnection(url,properties);
+
             //每5分钟发送一次请求，确保连接不超时
             timer=Bukkit.getScheduler().runTaskTimerAsynchronously(StoreSpace.plugin,()->{
                 String SELECT = "SELECT * FROM StoreSpace WHERE UUID=123";
