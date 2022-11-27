@@ -1,5 +1,8 @@
-drop_prob: 50 #掉落概率为50%  请填写0-100整数
-drop_percent: 50 #掉落50%的物品 请填写0-100整数
+drop_inventory: true #是否掉落背包里的物品
+drop_storespace: true #是否掉落存储空间内的物品
+
+drop_prob: 50 #掉落背包或存储空间的物品的概率为50%  请填写0-100整数
+drop_percent: 50 #掉落背包或存储空间50%的物品 请填写0-100整数
 key_lore:
  - '&1这是一条lore'
  - '&2这里的lore不支持多行'

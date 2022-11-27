@@ -12,10 +12,20 @@ public class DropConfig {
     private static List<String> lore;
     private static int drop_prob=50;
     private static int drop_percent=50;
+    private static boolean drop_inventory=true;
+    private static boolean drop_storespace=true;
     private static YamlConfiguration file;
 
     public static List<String> getLore() {
         return lore;
+    }
+
+    public static boolean isDrop_inventory() {
+        return drop_inventory;
+    }
+
+    public static boolean isDrop_storespace() {
+        return drop_storespace;
     }
 
     public static int getDrop_prob() {
@@ -32,6 +42,9 @@ public class DropConfig {
             file = YamlConfiguration.loadConfiguration(new File("plugins\\StoreSpace\\DropConfig.yml"));
             drop_prob=Integer.parseInt(file.getString("drop_prob"));
             drop_percent=Integer.parseInt(file.getString("drop_percent"));
+            drop_inventory=Boolean.parseBoolean(file.getString("drop_inventory"));
+            drop_storespace=Boolean.parseBoolean(file.getString("drop_storespace"));
+
             lore=file.getStringList("key_lore");
         } catch (Exception e) {
             Msg.Log("[StoreSpace]读取DropConfig.yml时出错，启用内置默认值");
