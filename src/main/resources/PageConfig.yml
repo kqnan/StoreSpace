@@ -1,8 +1,11 @@
 #解锁花费的金币 %slot%格子的序号（从左上角0开始，从左往右递增，从上往下递增）
 #支持数学公式
 money_unlock: "%slot%*10"
-#解锁需要的权限 %slot%代表格子序号
-perm_unlock: "StoreSpace.%slot%"
+#解锁需要的权限
+perm_unlock:
+  - "3-10:StoreSpace.unlock"
+  - "11-20:StoreSpace.vip"
+  - "59-100:StoreSpace.svip"
 #没权限时提示消息，支持多行消息，支持%slot%
 msg_noperm:
   - '你没权限解锁%slot%号格子'

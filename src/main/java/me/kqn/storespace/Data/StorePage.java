@@ -57,7 +57,7 @@ public class StorePage extends JsonStorePage{
         }
         //检查权限是否有
         String permNeed=PageConfig.getPerm_unlock(slot+pageID*48);
-        if(!StoreSpace.plugin.permission.hasPerm(pID,permNeed)){//如果没有
+        if(permNeed!=null&&!StoreSpace.plugin.permission.hasPerm(pID,permNeed)){//如果没有
             Msg.msg(pID,PageConfig.getMsg_noperm(slot,permNeed));
             if(player.isOnline()){
                 Player p=(Player) player;
