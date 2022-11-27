@@ -6,6 +6,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.UUID;
 import java.util.zip.GZIPInputStream;
@@ -19,7 +21,8 @@ public interface DataSource {
         try {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             GZIPOutputStream gzip = new GZIPOutputStream(bos);
-            gzip.write(json.getBytes());
+            gzip.write(json.getBytes(StandardCharsets.UTF_8));
+
             gzip.finish();
             gzip.close();
             byte[] ret = bos.toByteArray();
@@ -48,7 +51,7 @@ public interface DataSource {
             byte[] ret = bos.toByteArray();
             bos.flush();
             bos.close();
-            return new String(ret);
+            return new String(ret, StandardCharsets.UTF_8);
         }
         catch (Exception e){
             e.printStackTrace();

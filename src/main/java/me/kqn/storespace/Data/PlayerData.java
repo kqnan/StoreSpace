@@ -80,6 +80,7 @@ public class PlayerData   {
             jsonPage.add("unlocked",unlocked);
             JsonArray contents=new JsonArray();
             for (ItemStack content : storePage.contents) {
+
                 contents.add(NBTItem.convertItemtoNBT(content).toString());
             }
             jsonPage.add("contents",contents);
@@ -107,6 +108,7 @@ public class PlayerData   {
             JsonArray contents=objPage.getAsJsonArray("contents");
             i=0;
             for (JsonElement content : contents) {
+                
                 page.contents[i++]=NBTItem.convertNBTtoItem(new NBTContainer(content.getAsString()));
             }
             playerData.storePages[j++]=page;
