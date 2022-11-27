@@ -19,10 +19,10 @@ public class PageConfig {
         return perm_unlock.replace("%slot%",String.valueOf(slot));
     }
 
-    public static List<String> getMsg_noperm(int slot) {
+    public static List<String> getMsg_noperm(int slot,String permission) {
         List<String> msg=new ArrayList<>();
         for (String s : msg_noperm) {
-            msg.add(s.replace("%slot%",String.valueOf(slot)));
+            msg.add(s.replace("%slot%",String.valueOf(slot)).replace("%permission%",permission));
         }
         return msg;
     }
@@ -39,10 +39,10 @@ public class PageConfig {
         return page_sound;
     }
 
-    public static List<String> getMsg_nomoney(int slot) {
+    public static List<String> getMsg_nomoney(int slot,double money) {
         List<String> msg=new ArrayList<>();
         for (String s : msg_nomoney) {
-            msg.add(s.replace("%slot%",String.valueOf(slot)));
+            msg.add(s.replace("%slot%",String.valueOf(slot)).replace("%money%",String.valueOf(money)));
         }
         return msg;
     }

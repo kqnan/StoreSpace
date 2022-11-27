@@ -50,15 +50,15 @@ public class StorePage extends JsonStorePage{
         }
 
         //检查经济是否足够
-        double moneyNeed= ExpParser.parseMathExpression(PageConfig.getMoeny_unlock(slot+pageID*45));//获取需要多少金币解锁%slot%号槽位
+        double moneyNeed= ExpParser.parseMathExpression(PageConfig.getMoeny_unlock(slot+pageID*48));//获取需要多少金币解锁%slot%号槽位
         if(!StoreSpace.plugin.economy.has(Bukkit.getOfflinePlayer(pID),moneyNeed)){//如果没有足够的金币
-            Msg.msg(pID,PageConfig.getMsg_nomoney(slot));//发送金币不足消息
+            Msg.msg(pID,PageConfig.getMsg_nomoney(slot,moneyNeed));//发送金币不足消息
             return false;
         }
         //检查权限是否有
-        String permNeed=PageConfig.getPerm_unlock(slot+pageID*45);
+        String permNeed=PageConfig.getPerm_unlock(slot+pageID*48);
         if(!StoreSpace.plugin.permission.hasPerm(pID,permNeed)){//如果没有
-            Msg.msg(pID,PageConfig.getMsg_noperm(slot));
+            Msg.msg(pID,PageConfig.getMsg_noperm(slot,permNeed));
             if(player.isOnline()){
                 Player p=(Player) player;
                 SoundUtils.playSound(p,PageConfig.getNoperm_sound());//给玩家播放无权限时的声音。可以改为发包

@@ -6,7 +6,7 @@ perm_unlock: "StoreSpace.%slot%"
 #没权限时提示消息，支持多行消息，支持%slot%
 msg_noperm:
   - '你没权限解锁%slot%号格子'
-  - '你需要StoreSpace.%slot%权限'
+  - '你需要%permission%权限'
 #金币不足时消息
 msg_nomoney:
   - '你没有足够金币'
