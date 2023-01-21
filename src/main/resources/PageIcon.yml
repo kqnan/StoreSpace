@@ -1,0 +1,88 @@
+#当只有一个页面时
+1:
+  1:
+    title: '&6存储空间1-1'
+    unlock:
+      name: '未解锁1-1'
+      lore:
+        - '解锁需要%money%金币'
+        - '解锁需要%permission%权限'
+        - '未解锁的格子'
+        - '"1-1"是指当玩家只解锁了1个页面时'
+        - '第1页的图标。'
+        - '同理2-1是指当玩家解锁了2个页面时，第1页的图标'
+      custommodeldata: 1234
+      material: 'paper'
+    prePageIcon:
+      name: '上一页1-1'
+      lore:
+        - '上一页'
+      custommodeldata: 12
+      material: 'grass_block'
+    nextPageIcon:
+      name: '下一页1-1'
+      lore:
+        - '下一页'
+      custommodeldata: 123
+      material: 'grass_block'
+    sliderIcon:
+      name: '滑块1-1'
+      lore:
+        - '这是一个滑块'
+      custommodeldata: 123
+      material: 'STONE'
+#当有两个页面时
+2:
+  1:
+    title: '存储空间2-1'
+    unlock:
+      name: '未解锁2-1'
+      lore:
+        - '未解锁的格子'
+      custommodeldata: 1234
+      material: 'paper'
+    prePageIcon:
+      name: '上一页2-1'
+      lore:
+        - '上一页'
+      custommodeldata: 12
+      material: 'grass_block'
+    nextPageIcon:
+      name: '下一页2-1'
+      lore:
+        - '下一页'
+      custommodeldata: 123
+      material: 'grass_block'
+    sliderIcon:
+      name: '滑块2-1'
+      lore:
+        - '这是一个滑块'
+      custommodeldata: 123
+      material: 'STONE'
+  2:
+    title: '存储空间2-2'
+    unlock:
+      name: '未解锁2-2'
+      lore:
+
+        - '未解锁的格子'
+      custommodeldata: 1234
+      material: 'paper'
+    prePageIcon:
+      name: '上一页2-2'
+      lore:
+        - '上一页'
+      custommodeldata: 12
+      material: 'grass_block'
+    nextPageIcon:
+      name: '下一页2-2'
+      lore:
+        - '下一页'
+      custommodeldata: 123
+      material: 'grass_block'
+    sliderIcon:
+      name: '滑块2-2'
+      lore:
+        - '这是一个滑块'
+      custommodeldata: 123
+      material: 'STONE'
